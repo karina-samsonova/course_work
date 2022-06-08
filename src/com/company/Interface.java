@@ -30,23 +30,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * Класс, поддерживающий работу интерфейса
+ */
 public class Interface extends Application {
+    /** Глобальная переменная - индекс нового пассажира */
     static int pass_index = 0;
+    /** Глобальная переменная - лист ожидания */
     static final ArrayList<Passenger> waiting_list = new ArrayList<>();
+    /** Глобальная переменная - число этажей в здании */
     static int floors_num;
+    /** Глобальная переменная - вместимость кабины лифта */
     static int pass_limit;
+    /** Глобальная переменная - число лифтов в здании */
     static int lifts_num;
+    /** Глобальная переменная - иконки этажей */
     static StackPane[] floors;
+    /** Глобальная переменная - рандом */
     static Random random = new Random();
+    /** Глобальная переменная - ссылки на иконки пассажиров (мужчина и женщина) */
     static String[] Urls = new String[]{"file:src/man.png", "file:src/woman.png"};
+    /** Глобальная переменная - кнопки вызова лифта */
     static Buttons[] buttons;
 
-    public static void main(String[] args){
-
-    }
+    /** Процедура запуска интерфейса */
     public void launching(){
         Application.launch();
     }
+
     @Override
     public void start(Stage stage) {
         pass_limit = 5;
@@ -118,11 +129,17 @@ public class Interface extends Application {
         stage.setTitle("Settings");
         stage.show();
     }
+
     @Override
     public void stop() throws Exception {
         super.stop();
         System.exit(0);
     }
+
+    /**
+     * Процедура создания окна симуляции
+     * @param stage - сцена для выстраивания интерфейса
+     */
     public void Simulation(Stage stage){
         floors = new StackPane[floors_num];
         buttons = new Buttons[floors_num];
@@ -193,6 +210,11 @@ public class Interface extends Application {
         Generator gen = new Generator();
         gen.start();
     }
+
+    /**
+     * Процедура создания пассажира
+     * (добавление в {@link Interface#waiting_list} и управление интерфейсом)
+     */
     public static void addPassenger() {
         int dep = 1;
         int dest = floors_num;
@@ -246,21 +268,44 @@ public class Interface extends Application {
         sequentialTransition.play();
         pass_index++;
     }
+
+    /**
+     * Процедура передвижения иконки кабины лифта
+     * @param direction - направление передвижения
+     * @param cabin - иконка кабины лифта
+     */
     public static void moveCabin(int direction, StackPane cabin){
         TranslateTransition trans_l = new TranslateTransition(Duration.millis(800), cabin);
         trans_l.setByY(-1 * direction * 51.3);
         trans_l.play();
     }
+
+    /**
+     * Процедура передвижения иконки пассажира
+     * @param direction - направление передвижения
+     * @param fellow - иконка пассажира
+     */
     public static void moveFellow(int direction, Passenger fellow) {
         TranslateTransition trans_f = new TranslateTransition(Duration.millis(800), fellow.image);
         trans_f.setByY(-1 * direction * 51.3);
         trans_f.play();
     }
+
+    /**
+     * Процедура отображения посадки пассажира в кабину лифта
+     * @param pass - пассажир
+     * @param index - индекс лифта
+     */
     public static void getInCabin(Passenger pass, int index) {
         TranslateTransition transition = new TranslateTransition(Duration.millis(200), pass.image);
         transition.setByX(-51*(lifts_num-index));
         transition.play();
     }
+
+    /**
+     * Процедура отображения высадки пассажира из кабины лифта
+     * @param pass - пассажир
+     */
     public static void dropOff(Passenger pass) {
         TranslateTransition transition = new TranslateTransition(Duration.millis(500), pass.image);
         transition.setByX(50*lifts_num+150);

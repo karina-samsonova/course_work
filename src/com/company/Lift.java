@@ -1,14 +1,14 @@
 package com.company;
 
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 import java.util.*;
-
 import static com.company.Interface.buttons;
 import static com.company.Interface.waiting_list;
 
+/**
+ * Класс, поддерживающий работу лифта
+ */
 public class Lift extends Thread {
     int direction; //направление движения, если движение происходит (-1 - вниз, 0 - остановка, 1 - вверх)
     int load; //текущая весовая нагрузка кабины (в количестве людей)
@@ -24,6 +24,17 @@ public class Lift extends Thread {
     int[] cur_floors;
     final int[] dirs;
 
+    /**
+     * Конструктор
+     * @param i - индекс лифта
+     * @param pass_limit - вместимость кабины
+     * @param floors_num - число этажей в здании
+     * @param cabin - иконка кабины
+     * @param floors - иконки этажей
+     * @param lifts_num - число лифтов в здании
+     * @param cur_floors - текущее положение лифтов (этажи)
+     * @param dirs - текущие направления лифтов
+     */
     public Lift(int i, int pass_limit, int floors_num, StackPane cabin, StackPane[] floors, int lifts_num, int[] cur_floors, int[] dirs){
         this.direction = 0;
         this.load = 0;
@@ -40,6 +51,12 @@ public class Lift extends Thread {
         this.dirs = dirs;
     }
 
+    /**
+     * Функция определения направления кабины лифта
+     * @param dep - точка отправления
+     * @param dest - пункт назначения
+     * @return возвращает направление (1-вверх, -1-вниз, 0-стоит на месте)
+     */
     public int getDir(int dep, int dest) {
         if (dep < dest){
              return 1;
@@ -51,9 +68,16 @@ public class Lift extends Thread {
             return 0;
         }
     }
+
+    /** Процедура запуска потока класса */
     public void startThread(){
         this.start();
     }
+
+    /**
+     * Процедура передвижения кабины лифта и всех ее пассажиров
+     * @param direction - направление передвижения
+     */
     public synchronized void move(int direction) {
         Platform.runLater(new Runnable() {
             @Override
@@ -73,6 +97,11 @@ public class Lift extends Thread {
         }
         System.out.println(index + " transitioned to " + cur_floor + "");
     }
+
+    /**
+     * Процедура посадки пассажира в текущую кабину лифта
+     * @param pass - пассажир
+     */
     public synchronized void getInCabin(Passenger pass) {
         try {
             sleep(600);
@@ -82,6 +111,11 @@ public class Lift extends Thread {
         pass.setStatus(2);
         Interface.getInCabin(pass, index);
     }
+
+    /**
+     * Процедура высадки пассажира из текущей кабины лифта
+     * @param pass - пассажир
+     */
     public synchronized void dropOff(Passenger pass) {
         try {
             sleep(900);

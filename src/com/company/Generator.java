@@ -3,9 +3,11 @@ package com.company;
 import javafx.application.Platform;
 import java.util.Random;
 
+/**
+ * Класс для рандомной и непрерывной генерации потока пассажиров
+ */
 public class Generator extends Thread {
     public void run() {
-
         Random random = new Random();
         while (true) {
             try {

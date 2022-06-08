@@ -1,5 +1,8 @@
 package com.company;
 
+/**
+ * Класс, запускающий {@link Interface} в отдельном потоке
+ */
 public class Launcher extends Thread{
 
     @Override
