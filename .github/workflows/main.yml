@@ -26,7 +26,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          distribution: 'zulu'
 
       # Step 3
       - name: Build the project
